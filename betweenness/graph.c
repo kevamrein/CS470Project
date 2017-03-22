@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <igraph.h>
+#include "graph.h"
 
 igraph_vector_t v;
 

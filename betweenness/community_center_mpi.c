@@ -11,7 +11,7 @@ igraph_vs_t local_verticies;   // This is the recv_buf if I make the datatype
 double *local_double_verticies; // Trying this as the recvbuf now
 
 // Function prototypes
-igraph_vit_t* get_interators();
+igraph_vit_t* get_iterators();
 
 int main(int argc, char *argv[]) {
     /* Initialization */

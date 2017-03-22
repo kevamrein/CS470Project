@@ -26,7 +26,7 @@ int main() {
 
     // Create the interator from this vector
     igraph_vit_create(&g, vertices, &vertexIter);
-
+    printf("VS TYPE: %d\n", igraph_vs_type(&vertices));
     // Loop through each vertex in the iterator and print its id (0-8 inclusive)
     while (!IGRAPH_VIT_END(vertexIter)) {
         printf("%li\n", (long int) IGRAPH_VIT_GET(vertexIter));

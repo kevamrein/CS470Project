@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
   igraph_vit_create(&g, igraph_vss_all(), &vit);
 
   // Get the amount of items in the iterator
-  printf("Size: %ld\n\n", IGRAPH_VIT_SIZE(vit));
+  printf("Vector Size: %ld\n\n", IGRAPH_VIT_SIZE(vit));
   
   // Check result
   igraph_get_edgelist(&g, &v, 0);

@@ -2,22 +2,7 @@
 #include <stdlib.h>
 #include <igraph.h>
 
-/* int main(int argc, char* argv[]) {
-
-  FILE *file = fopen (argv[1], "r");
-  int f, t;
-  int test[6];
-  while(fscanf(file, "%d %d", &f, &t) > 0) {
-     //printf("%d -> %d\n", f, t); 
-     test[f] = t;
-  }
-  fclose(file);
-  
-  for (int i = 1; i < 6; i++)
-   printf ("%d = %d\n", i, test[i]);
-  return 0;
-}
-*/
+igraph_vector_t v;
 
 void print_vector(igraph_vector_t *v, FILE *f) {
   long int i;
@@ -27,23 +12,29 @@ void print_vector(igraph_vector_t *v, FILE *f) {
   fprintf(f, "\n");
 }
 
-int main(int argc, char* argv[]) {
-
+igraph_t create_graph(char* file_name) {
   igraph_t g;
-  igraph_vit_t vit;
-  igraph_vector_t v;
-  int ret;
+  int size, f, index = 0;
 
   // Create graph
-  igraph_vector_init(&v, 156);
-  FILE *file = fopen (argv[1], "r");
-  int f;
-  int index; 
+  FILE *file = fopen (file_name, "r");
+  fscanf(file, "%d", &size);
+  igraph_vector_init(&v, size);
   while(fscanf(file, "%d", &f) > 0) {
      VECTOR(v)[index++] = f-1;
   }
   fclose(file);
   igraph_create(&g, &v, 0, IGRAPH_UNDIRECTED);
+  
+  return g;  
+}
+
+int main(int argc, char* argv[]) {
+
+  igraph_vit_t vit;
+  
+  // Create a graph - pass filename
+  igraph_t g = create_graph(argv[1]); 
   
   // Create an vit (iterator) through all of the vertices
   igraph_vit_create(&g, igraph_vss_all(), &vit);

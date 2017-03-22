@@ -2,7 +2,7 @@ default: graph
 
 cluster: graph-cluster
 
-test: graph
+test: graph-cluster
 	LD_PRELOAD=/shared/lib/igraph-0.7.1/src/.libs/libigraph.so ./graph edges.txt 
 
 graph: graph.c

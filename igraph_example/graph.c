@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
   int f;
   int index; 
   while(fscanf(file, "%d", &f) > 0) {
-     VECTOR(v)[index++] = f;
+     VECTOR(v)[index++] = f-1;
   }
   fclose(file);
   igraph_create(&g, &v, 0, IGRAPH_UNDIRECTED);

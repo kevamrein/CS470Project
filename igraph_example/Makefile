@@ -1,17 +1,16 @@
-default: vertex betweenness graph test
+default: vertex betweenness graph
+
+test: graph
+	LD_PRELOAD=/shared/lib/igraph-0.7.1/src/.libs/libigraph.so ./graph edges.txt 
 
 vertex: vertex.c
-	gcc vertex.c -I/usr/local/Cellar/igraph/0.7.1_3/include/igraph -L/usr/local/Cellar/igraph/0.7.1_3/lib -ligraph -o vertex
+	gcc vertex.c -I/shared/lib/igraph-0.7.1/include -L/shared/lib/igraph-0.7.1/src/.libs -ligraph -o vertex
 
 betweenness: edge_betweenness.c
-	gcc edge_betweenness.c -I/usr/local/Cellar/igraph/0.7.1_3/include/igraph -L/usr/local/Cellar/igraph/0.7.1_3/lib -ligraph -o betweenness 
+	gcc edge_betweenness.c -I/shared/lib/igraph-0.7.1/include -L/shared/lib/igraph-0.7.1/src/.libs -ligraph -o betweenness 
 
 graph: graph.c
-	gcc graph.c -I/usr/local/Cellar/igraph/0.7.1_3/include/igraph -L/usr/local/Cellar/igraph/0.7.1_3/lib -ligraph -o graph
-
-test: test.c
-	gcc test.c -I/usr/local/Cellar/igraph/0.7.1_3/include/igraph -L/usr/local/Cellar/igraph/0.7.1_3/lib -ligraph -o test
-
+	gcc graph.c -I/shared/lib/igraph-0.7.1/include -L/shared/lib/igraph-0.7.1/src/.libs -ligraph -o graph
 
 clean:
 	rm -f vertex betweenness

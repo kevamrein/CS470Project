@@ -6,6 +6,9 @@ int my_rank;
 int nprocs;
 graph_t graph;
 igraph_vs_t *vertices;
+int verticies_per_node;
+igraph_vs_t local_verticies;   // This is the recv_buf if I make the datatype
+double *local_double_verticies; // Trying this as the recvbuf now
 
 // Function prototypes
 igraph_vit_t* get_interators();
@@ -28,22 +31,39 @@ int main(int argc, char *argv[]) {
             dynamically allocated) */
         if (igraph_vcount(&graph) % nprocs != 0) {
             // Finalize and Destroy
+            igraph_destroy(&graph);
             MPI_Finalize();
 
             return 1;
         }
+        
+        // Send each vector data as a double array using a vector view
+        for (int i = 0 ; i < nprocs ; i++) {
+            double *data;
+            igraph_vector_copy_to(&verticies[i], data);
 
+            MPI_Send(data, verticies_per_node, MPI_DOUBLE, 
+                local_double_verticies, 0, MPI_COMM_WORLD);
+        }
+
+        /*
+        igraph_vit_t iterators[nprocs] = get_iterators();
+        
+        MPI_Scatter(iterators, nprocs, , 
+            recv_buff, recv_count, recv_dtype, recv_count, recv_dtype, 
+            root, comm);
+        */
     }
     MPI_Barrier(MPI_COMM_WORLD);
-
+    calculate_max_betweenness();
 
     MPI_Finalize();
     return 0;
 }
 
-igraph_vit_t* get_interators() {
+igraph_vit_t* get_iterators() {
     igraph_integer_t vertices_count = igraph_vcount(&graph);
-    int verticies_per_node = verticies_count / nprocs;
+    verticies_per_node = verticies_count / nprocs;
     igraph_vit_t iterators[nprocs];
     int start, end;
     vertices = (igraph_vs_t*) malloc(sizeof(igraph_vs_t) * nprocs);
@@ -52,17 +72,24 @@ igraph_vit_t* get_interators() {
 
     for (int i = 0 ; i < nprocs ; i++) {
         igraph_vs_seq(&vertices[i], start, end);
-        igraph_vit_create(&graph, vertices[i], &interators[i]);
+        start = end + 1;
+        end = start + verticies_per_node;
     }
 
-    return interators;
+    return iterators;
+}
+
+void calculate_max_betweenness() {
+    igraph_vector_t current_vector, result;
+    igraph_vector_view(&current_vector, local_double_verticies, verticies_per_node);
+    igraph_betweenness(&graph, &result, );
 }
 
 void destroy_verticies_iterators(igraph_vit_t* iterators) {
     int i;
     for (i = 0 ; i < nprocs ; i++) {
         igraph_vit_destroy(&iterators[i]);
-        igraph_vit_destroy(&verticies[i]);
+        igraph_vs_destroy(&verticies[i]);
     }
     free(iterators);
     free(verticies);

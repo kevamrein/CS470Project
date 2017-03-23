@@ -29,7 +29,7 @@ igraph_t create_graph(char* file_name) {
   return g;  
 }
 
-int main(int argc, char* argv[]) {
+/* int main(int argc, char* argv[]) {
 
   igraph_vit_t vit;
   
@@ -55,4 +55,4 @@ int main(int argc, char* argv[]) {
   igraph_destroy(&g);
 
   return 0;
-}
+} */

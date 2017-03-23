@@ -53,6 +53,17 @@ int main() {
              print_vector(&mine, stdout);
 
   igraph_vector_destroy(&mine);
+  
+  igraph_vector_init(&mine, igraph_vcount(&g) - 1);
+  igraph_vs_t remove_vs;
+  igraph_vs_1(&remove_vs, 6);
+  igraph_delete_vertices(&g, remove_vs);
+  igraph_betweenness(&g, &mine, igraph_vss_all(), IGRAPH_UNDIRECTED, 0, 1);
+  printf("\nBetweenness without 6\n\n");
+  print_vector(&mine, stdout);
+
+  igraph_vs_destroy(&remove_vs);
+  igraph_vector_destroy(&mine);
   igraph_destroy(&g);
 
   return 0;

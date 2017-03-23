@@ -5,22 +5,20 @@ CFLAG=-I/usr/local/Cellar/igraph/0.7.1_3/include/igraph
 
 default: graph omp
 
-cluster: app
-
-app: community_center_omp.o graph.o
-	gcc community_center_omp.o graph.o -o app
+cluster: graph-cluster.o omp-cluster.o
+	gcc $(CLUSTER_CFLAG) $(CLUSTER_LDFLAG) -ligraph -o proj graph.o community_center_omp.o
 
 graph: graph.c
 	gcc -c graph.c $(CFLAG) $(LDFLAG) -ligraph -o graph
 
-graph-cluster.o: graph.c graph.h
-	gcc -c graph.c $(CLUSTER_CFLAG) $(CLUSTER_LDFLAG) -ligraph -o graph.o
+graph-cluster.o: graph.h graph.c
+	gcc -c $(CLUSTER_CFLAG) $(CLUSTER_LDFLAG) -ligraph graph.c
 
-omp-cluster.o: community_center_omp.c graph.h
-	gcc -c community_center_omp.c $(CLUSTER_CFLAG) $(CLUSTER_LDFLAG) -ligraph -o community_center_omp.o
+omp-cluster.o: graph.h community_center_omp.c
+	gcc -c $(CLUSTER_CFLAG) $(CLUSTER_LDFLAG) -ligraph community_center_omp.c
 
 omp: community_center_omp.c
-	gcc -c community_center_omp.c $(CFLAG) $(LDFLAG)  -o community_center_omp 
+	gcc -c community_center_omp.c $(CFLAG) $(LDFLAG) -ligraph -o community_center_omp 
 
 clean:
-	rm -f graph community_center_omp
+	rm -f graph.o community_center_omp.o proj

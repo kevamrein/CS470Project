@@ -15,7 +15,6 @@ void print_vector(igraph_vector_t *v, FILE *f) {
 igraph_t create_graph(char* file_name) {
   igraph_t g;
   int size, f, index = 0;
-
   // Create graph
   FILE *file = fopen (file_name, "r");
   fscanf(file, "%d", &size);
@@ -27,6 +26,19 @@ igraph_t create_graph(char* file_name) {
   igraph_create(&g, &v, 0, IGRAPH_UNDIRECTED);
   
   return g;  
+}
+
+struct edge* get_edges(igraph_t g) {
+    int i, j = 0;
+    int edge_count = igraph_ecount(&g);
+    int vector_size = igraph_vector_size(&v);
+    struct edge *edges = (struct edge*)malloc(sizeof(struct edge) * edge_count);;
+    for (i = 0 ; i < vector_size- 1 ; i+=2) {
+        edges[j].from = VECTOR(v)[i];
+        edges[j].to = VECTOR(v)[i+1];
+        j++;
+    }
+    return edges;
 }
 
 /* int main(int argc, char* argv[]) {

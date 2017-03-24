@@ -17,8 +17,6 @@ struct Compare find_max_betweenness();
 void normal_betweenness();
 
 int main(int argc, char *argv[]) {
-    int i;
-    
     // Get adjacency matrix or edges from the file and use Chuchi's functions
     // and put it in graph
     START_TIMER(graph_create)
@@ -48,6 +46,7 @@ struct Compare find_max_betweenness() {
     max_vertex.betweenness = -1;
     max_vertex.vid = -1;
 
+
 //#   pragma omp parallel for default(none) shared(vcount, graph) \
     private(i) reduction(maximum: max_vertex)
 #   pragma omp parallel for default(none) shared(max_vertex, vcount, graph) \
@@ -56,8 +55,7 @@ struct Compare find_max_betweenness() {
         igraph_vs_t vs;
         igraph_vector_t result;
         igraph_vector_init(&result, 0);
-
-       igraph_vs_1(&vs, i);
+        igraph_vs_1(&vs, i);
         igraph_betweenness(&graph, &result, vs, IGRAPH_UNDIRECTED, 0, 1);
         double betweenness = (double) VECTOR(result)[0];
         //printf ("i: %d betweenness: %f\n", i, betweenness);
@@ -68,8 +66,9 @@ struct Compare find_max_betweenness() {
             max_vertex.vid = i;
         }
         }
-	igraph_vs_destroy(&vs);
+        
         igraph_vector_destroy(&result);
+	    igraph_vs_destroy(&vs);
     }
     printf ("max vertex: %d, max_b: %f\n", max_vertex.vid, max_vertex.betweenness);
     

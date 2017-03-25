@@ -1,6 +1,8 @@
 #include <stdbool.h>
 #include "graph.h"
-
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 
 #define DEGREE_VECTOR_SIZE 2
 #define P_VALUE 0
@@ -24,23 +26,11 @@ int main(int argc, char* argv[]) {
     int vcount = igraph_vcount(&graph);
     struct edge *edges = get_edges(graph); 
     int i;
-/*
-    for (i = 0 ; i < ecount ; i++) {
-        struct edge current = edges[i];
-        
-        double importance = get_importance(current);
-        
-        double w_value = get_w(current, importance);
 
-        printf("%d -> %d \t importance: %f \t w: %f\n", current.from, current.to, importance, w_value);
-        //printf("i: %d\t from: %d\t to: %d\n", i, current.from, current.to);
-    }
-*/
-
+#   pragma omp parallel for default(none) shared (vcount) private(i)
     for (i = 0 ; i < vcount ; i++) {
-        printf("vertex: %d\n", i);
         double result = get_l(i);
-        printf("L-Value: %f\n", result);
+        printf("vertex: %d\tL-Value: %f\n", i, result);
     }
 
     igraph_destroy(&graph);
@@ -61,6 +51,9 @@ double get_l(int vid) {
     igraph_neighbors(&graph, &neighbors, vid, IGRAPH_ALL);
     
     vector_size = igraph_vector_size(&neighbors);
+    
+#   pragma omp parallel for default(none) shared(vector_size, neighbors, vid, current) \
+    private(i) reduction(+ : w_sum)
     for (i = 0 ; i < vector_size ; i++) {
 
         int this_neighbor = (int) VECTOR(neighbors)[i];
@@ -107,8 +100,6 @@ double get_u(struct edge *current) {
     current->from_degree = get_vertex_degree(current->from);
     current->to_degree = get_vertex_degree(current->to);
    
-//    printf("From degree: %f to_degree: %f\n", current.from_degree, current.to_degree);
-//    printf("FOMMM:%d TOOOO: %d", current.from, current.to);
     u_value = (current->from_degree - P_VALUE - 1) * (current->to_degree - P_VALUE - 1);
     
 

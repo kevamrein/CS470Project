@@ -17,6 +17,10 @@ double get_l(int vid);
 struct edge build_edge(int from, int to);
 double get_vertex_degree(int vid);
 
+typedef struct Compare {
+    double l_value;
+    int vid;
+} Compare;
 
 int main(int argc, char* argv[]) {
     // Create graph
@@ -24,23 +28,28 @@ int main(int argc, char* argv[]) {
     
     int ecount = igraph_ecount(&graph);
     int vcount = igraph_vcount(&graph);
-    struct edge *edges = get_edges(graph); 
+    struct edge *edges = get_edges(graph);
     int i;
-    int vertex = -1; 
-    double max_result = -1; 
+    double max_value;
+    struct Compare max_info;
 
-#   pragma omp parallel for default(none) shared (vertex, vcount, max_result) private(i)
+    max_info.l_value = -1;
+    max_info.vid = -1;
+
+#   pragma omp declare reduction(maximum : struct Compare : omp_out = omp_in.l_value < omp_out.l_value ? omp_out : omp_in)
+
+#   pragma omp parallel for default(none) shared (vcount) private(i) reduction(maximum : max_info)
     for (i = 0 ; i < vcount ; i++) {
         double result = get_l(i);
-#       pragma omp critical
-        if (result > max_result) {
-            vertex = i; 
-            max_result = result; 
+        if (result > max_info.l_value) {
+            max_info.l_value = result;
+            max_info.vid = i;
         }
+        printf("vertex: %d\tL-Value: %f\n", i, result);
     }
-
-    printf("vertex: %d\tL-Value: %f\n", vertex, max_result);
     
+    printf("max_vertex: %d\tmax_l: %f\n", max_info.vid, max_info.l_value);
+ 
     igraph_destroy(&graph);
     return 0;
 }

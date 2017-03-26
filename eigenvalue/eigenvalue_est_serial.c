@@ -4,7 +4,7 @@
 #include <igraph.h>
 
 /** Uncomment this for debugging **/
-#define _debug
+//#define _debug
 
 /**
  * This program is a serial implementations of linear algebra,

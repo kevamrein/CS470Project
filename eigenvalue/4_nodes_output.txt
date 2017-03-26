@@ -3,41 +3,4 @@ Intial Adjacency Matrix
 0 1 0 0 
 0 0 1 0 
 1 0 0 0 
-Initial Eigenvalue: 1.000000
-
-Adjusted Matrix with idx=0
-0 0 0 0 
-0 1 0 0 
-0 0 1 0 
-0 0 0 0 
-Matrix eigenvalue is: 1.000000
-1.000000 - 1.000000 / 1.000000
-Change in eigenvalue is 0.000000
-
-Adjusted Matrix with idx=1
-1 0 1 0 
-0 0 0 0 
-0 0 1 0 
-1 0 0 0 
-Matrix eigenvalue is: 1.000000
-1.000000 - 1.000000 / 1.000000
-Change in eigenvalue is 0.000000
-
-Adjusted Matrix with idx=2
-1 0 0 0 
-0 1 0 0 
-0 0 0 0 
-1 0 0 0 
-Matrix eigenvalue is: 1.000000
-1.000000 - 1.000000 / 1.000000
-Change in eigenvalue is 0.000000
-
-Adjusted Matrix with idx=3
-1 0 1 0 
-0 1 0 0 
-0 0 1 0 
-0 0 0 0 
-Matrix eigenvalue is: 1.000000
-1.000000 - 1.000000 / 1.000000
-Change in eigenvalue is 0.000000
 Central node is: 3

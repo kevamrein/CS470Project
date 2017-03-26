@@ -1,0 +1,75 @@
+Intial Adjacency Matrix
+0 0 1 0 0 0 
+0 0 1 0 1 0 
+1 1 0 1 0 1 
+0 0 1 0 0 0 
+0 1 0 0 0 0 
+0 0 1 0 0 0 
+Initial Eigenvalue: 2.074313
+
+Adjusted Matrix with idx=0
+0 0 0 0 0 0 
+0 0 1 0 1 0 
+0 1 0 1 0 1 
+0 0 1 0 0 0 
+0 1 0 0 0 0 
+0 0 1 0 0 0 
+Matrix eigenvalue is: 1.847759
+2.074313 - 1.847759 / 2.074313
+Change in eigenvalue is 0.109219
+
+Adjusted Matrix with idx=1
+0 0 1 0 0 0 
+0 0 0 0 0 0 
+1 0 0 1 0 1 
+0 0 1 0 0 0 
+0 0 0 0 0 0 
+0 0 1 0 0 0 
+Matrix eigenvalue is: 1.732051
+2.074313 - 1.732051 / 2.074313
+Change in eigenvalue is 0.165000
+
+Adjusted Matrix with idx=2
+0 0 0 0 0 0 
+0 0 0 0 1 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+Matrix eigenvalue is: 1.000000
+2.074313 - 1.000000 / 2.074313
+Change in eigenvalue is 0.517913
+
+Adjusted Matrix with idx=3
+0 0 1 0 0 0 
+0 0 1 0 1 0 
+1 1 0 0 0 1 
+0 0 0 0 0 0 
+0 1 0 0 0 0 
+0 0 1 0 0 0 
+Matrix eigenvalue is: 1.847759
+2.074313 - 1.847759 / 2.074313
+Change in eigenvalue is 0.109219
+
+Adjusted Matrix with idx=4
+0 0 1 0 0 0 
+0 0 1 0 0 0 
+1 1 0 1 0 1 
+0 0 1 0 0 0 
+0 0 0 0 0 0 
+0 0 1 0 0 0 
+Matrix eigenvalue is: 2.000000
+2.074313 - 2.000000 / 2.074313
+Change in eigenvalue is 0.035825
+
+Adjusted Matrix with idx=5
+0 0 1 0 0 0 
+0 0 1 0 1 0 
+1 1 0 1 0 0 
+0 0 1 0 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+Matrix eigenvalue is: 1.847759
+2.074313 - 1.847759 / 2.074313
+Change in eigenvalue is 0.109219
+Central node is: 2

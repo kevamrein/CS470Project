@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     graph = create_graph(argv[1]);
     STOP_TIMER(graph_create)
     vcount = igraph_vcount(&graph);
-    printf ("vertices: %d, edges: %d\n", vcount, igraph_ecount(&graph)); 
+    //printf ("vertices: %d, edges: %d\n", vcount, igraph_ecount(&graph)); 
 
     START_TIMER(find_max)
     struct Compare current_max = find_max_betweenness();
@@ -74,6 +74,6 @@ void normal_betweenness() {
     igraph_vector_init(&result, igraph_vcount(&graph));
     igraph_betweenness(/*graph=*/ &graph, /*res=*/ &result, /*vids=*/ igraph_vss_all(), 
         /*directed=*/IGRAPH_UNDIRECTED, /*weights=*/ 0, /*nobigint=*/ 1);
-    print_vector(&result, stdout);
+   // print_vector(&result, stdout);
     igraph_vector_destroy(&result);
 }

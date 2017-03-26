@@ -26,13 +26,21 @@ int main(int argc, char* argv[]) {
     int vcount = igraph_vcount(&graph);
     struct edge *edges = get_edges(graph); 
     int i;
+    int vertex = -1; 
+    double max_result = -1; 
 
-#   pragma omp parallel for default(none) shared (vcount) private(i)
+#   pragma omp parallel for default(none) shared (vertex, vcount, max_result) private(i)
     for (i = 0 ; i < vcount ; i++) {
         double result = get_l(i);
-        printf("vertex: %d\tL-Value: %f\n", i, result);
+#       pragma omp critical
+        if (result > max_result) {
+            vertex = i; 
+            max_result = result; 
+        }
     }
 
+    printf("vertex: %d\tL-Value: %f\n", vertex, max_result);
+    
     igraph_destroy(&graph);
     return 0;
 }

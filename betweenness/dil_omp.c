@@ -26,30 +26,34 @@ int main(int argc, char* argv[]) {
     // Create graph
     graph = create_graph(argv[1]);
     
-    int ecount = igraph_ecount(&graph);
     int vcount = igraph_vcount(&graph);
-    struct edge *edges = get_edges(graph);
     int i;
-    double max_value;
     struct Compare max_info;
 
     max_info.l_value = -1;
     max_info.vid = -1;
 
+
+  
 #   pragma omp declare reduction(maximum : struct Compare : omp_out = omp_in.l_value < omp_out.l_value ? omp_out : omp_in)
 
+    START_TIMER(max_count)
 #   pragma omp parallel for default(none) shared (vcount) private(i) reduction(maximum : max_info)
     for (i = 0 ; i < vcount ; i++) {
         double result = get_l(i);
+        
+#       pragma omp critical
+        {
         if (result > max_info.l_value) {
             max_info.l_value = result;
             max_info.vid = i;
         }
-        printf("vertex: %d\tL-Value: %f\n", i, result);
+        }
     }
+    STOP_TIMER(max_count)
     
     printf("max_vertex: %d\tmax_l: %f\n", max_info.vid, max_info.l_value);
-
+    printf("Find Max Time: %f\n", GET_TIMER(max_count));
     igraph_destroy(&graph);
     return 0;
 }

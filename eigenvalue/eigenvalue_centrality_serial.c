@@ -3,8 +3,18 @@
 #include <string.h>
 #include <igraph.h>
 
-// #define _debug
+/** Uncomment this for debugging **/
+//#define _debug
 
+/**
+ * This program is a serial implementations of linear algebra,
+ * specifically eigenvalue estimations used
+ * to determine the central node within a community
+ * of connected nodes.
+ * 
+ * author: Samantha Carswell
+ * versionL 03-26-2017
+ */
 long	 			nodes_num;
 igraph_matrix_t		adjMatrix;
 
@@ -49,8 +59,6 @@ void createMatrix(char* filename)
 			igraph_matrix_set(&adjMatrix, idx, curr, node);
 		}
 	}
-
-
 }
 
 /**
@@ -72,6 +80,10 @@ void printMatrix(igraph_matrix_t* matrix)
 	}
 }
 
+/**
+ * Returns the max eigenvalue from a vector
+ * of eigenvalues.
+ */
 double max(igraph_vector_t *vector)
 {
 	int idx = 0;
@@ -79,7 +91,6 @@ double max(igraph_vector_t *vector)
 
 	for (; idx<igraph_vector_size(vector); idx++)
 	{
-		printf("%lf, ", igraph_vector_e(vector, idx));
 		if (value < igraph_vector_e(vector, idx))
 			value = igraph_vector_e(vector, idx);
 	}
@@ -88,6 +99,15 @@ double max(igraph_vector_t *vector)
 
 }
 
+/**
+ * Computes central node from an adjacency
+ * matrix which represents a single community.
+ * Implements eigenvalue calculations and methods
+ * from iGraph library to find the node which has
+ * the most impact on the matrix upon its removal.
+ *
+ * Returns the central node.
+ */
 int findCentrality()
 {
 	igraph_vector_t		values;
@@ -137,7 +157,9 @@ int findCentrality()
 		/* Calculate eigenvalue on adjusted matrix*/
 		igraph_lapack_dgeev(&A, &values, NULL, NULL, NULL, &info);
 		curr_eigenValue = max(&values);
+#		ifdef _debug
 		printf("Matrix eigenvalue is: %lf\n", curr_eigenValue);
+#		endif	
 		/* Change in eigenvalue / initial eigenvalue */
 		curr_change = (fabs(init_eigenValue - curr_eigenValue)) / init_eigenValue;	
 #		ifdef _debug
@@ -156,21 +178,28 @@ int findCentrality()
 	return node;
 }
 
-
+/**
+ * Takes in filename that contains adjacency
+ * matrix and determines central node of that
+ * matrix.
+ */
 int main(int argc, char *argv[]) {
 	char* filename;
 	// read in filename from command line first
-    filename="community.txt";
 	
-	if (argc ==2)
-		filename = argv[1];
+	if (argc != 2)
+	{
+		printf("Please pass a  filename\n");
+		exit(EXIT_FAILURE);
+	}
+		
+	filename = argv[1];
 
 	createMatrix(filename);	
-#	ifdef _debug
+	
+	printf("Intial Adjacency Matrix\n");
 	printMatrix(&adjMatrix);
-#	endif
 
-	//printCentralNodes(findCentrality());
  	printf("Central node is: %d\n", findCentrality());
 	igraph_matrix_destroy(&adjMatrix);
 

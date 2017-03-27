@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
 #   pragma omp declare reduction(maximum : struct Compare : omp_out = omp_in.l_value < omp_out.l_value ? omp_out : omp_in)
 
     START_TIMER(max_count)
-#   pragma omp parallel for default(none) shared (vcount) private(i) reduction(maximum : max_info)
+#   pragma omp parallel for default(none) shared (vcount, max_info) private(i)
     for (i = 0 ; i < vcount ; i++) {
         double result = get_l(i);
         

@@ -2,8 +2,16 @@
 #include <stdlib.h>
 #include "graph.h"
 
-igraph_vector_t v;
+/*
+ * graph.c Contains helper methods 
+ */
 
+igraph_vector_t v;  //global variable
+
+/*
+ * Checks if create_graph is correct.
+ *
+ */
 void print_vector(igraph_vector_t *v, FILE *f) {
   long int i;
   for (i=0; i<igraph_vector_size(v); i++) {
@@ -12,22 +20,34 @@ void print_vector(igraph_vector_t *v, FILE *f) {
   fprintf(f, "\n");
 }
 
+/*
+ * Creates a graph given a text file with edges
+ */
 igraph_t create_graph(char* file_name) {
   igraph_t g;
   int size, f, index = 0;
-  // Create graph
+  
+  /* Open a file */ 
   FILE *file = fopen (file_name, "r");
-  fscanf(file, "%d", &size);
+  fscanf(file, "%d", &size);  //size of vectors needed, edges x 2
+  
+  /* Initialize a vector: IGraph's internal struct */
   igraph_vector_init(&v, size);
+
+  /* Read in a node and assign it to 1 vector at a time*/
   while(fscanf(file, "%d", &f) > 0) {
      VECTOR(v)[index++] = f-1;
   }
+  
   fclose(file);
   igraph_create(&g, &v, 0, IGRAPH_UNDIRECTED);
   
   return g;  
 }
 
+/* 
+ * Returns a list of edges given a graph. 
+ */
 struct edge* get_edges(igraph_t g) {
     int i, j = 0;
     int edge_count = igraph_ecount(&g);
@@ -41,30 +61,3 @@ struct edge* get_edges(igraph_t g) {
     return edges;
 }
 
-/* int main(int argc, char* argv[]) {
-
-  igraph_vit_t vit;
-  
-  // Create a graph - pass filename
-  igraph_t g = create_graph(argv[1]); 
-  
-  // Create an vit (iterator) through all of the vertices
-  igraph_vit_create(&g, igraph_vss_all(), &vit);
-
-  // Get the amount of items in the iterator
-  printf("Vector Size: %ld\n\n", IGRAPH_VIT_SIZE(vit));
-  
-  // Check result
-  igraph_get_edgelist(&g, &v, 0);
-  igraph_vector_sort(&v);
-  print_vector(&v, stdout);
-  printf ("edge_count: %d\n", igraph_ecount(&g));
-  igraph_write_graph_edgelist(&g, stdout);
-  
-  // Destroy resources
-  igraph_vit_destroy(&vit);
-  igraph_vector_destroy(&v);
-  igraph_destroy(&g);
-
-  return 0;
-} */

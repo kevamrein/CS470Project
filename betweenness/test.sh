@@ -5,7 +5,8 @@
 
 echo "Using Zachary's Karate Data Set"
 
-make clean && make cluster
+make clean 
+make
 
 echo "Method #2 Betweenness Centrality BC"
 echo "--Serial Version--"

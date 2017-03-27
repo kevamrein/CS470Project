@@ -49,7 +49,6 @@ int main(int argc, char* argv[]) {
     }
     
     printf("max_vertex: %d\tmax_l: %f\n", max_info.vid, max_info.l_value);
- 
     igraph_destroy(&graph);
     return 0;
 }

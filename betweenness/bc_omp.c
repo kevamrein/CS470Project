@@ -59,4 +59,3 @@ struct Compare find_max_betweenness() {
     
     return max_vertex;    
 }
-

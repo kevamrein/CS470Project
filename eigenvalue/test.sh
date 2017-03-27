@@ -1,5 +1,5 @@
 #!/bin/bash
-rm simple_output.txt 4_nodes_output.txt 6_nodes_output.txt 12_nodes_output.txt
+rm out/simple_output.txt out/4_nodes_output.txt out/6_nodes_output.txt out/12_nodes_output.txt
 make clean
 make
 

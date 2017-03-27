@@ -1,3 +1,8 @@
+/**
+ * Computes betweenness centrality and returns the vertex with the
+ * maximum betweenness.
+ */
+
 #include "graph.h"
 #ifdef _OPENMP
 #include <omp.h>
@@ -15,6 +20,10 @@ typedef struct Compare {
 // Function Prototypes
 struct Compare find_max_betweenness();
 
+/**
+ * Calls method to calculate the maximum betweenness and prints the execution time
+ * to calculate the betweenness.
+ */
 int main(int argc, char *argv[]) {
     graph = create_graph(argv[1]);
     vcount = igraph_vcount(&graph);
@@ -27,6 +36,11 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
+/**
+ * Calculates the maximum betweenness using user-defined reductions.
+ * Returns a Compare struct which contains the max betweenness value
+ * as well as the vertex which had the max betweenness.
+ */
 struct Compare find_max_betweenness() {
 #   pragma omp declare reduction(maximum : struct Compare : omp_out = omp_in.betweenness < omp_out.betweenness ? omp_out : omp_in)
     int i;

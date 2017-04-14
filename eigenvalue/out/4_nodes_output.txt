@@ -1,6 +1,6 @@
-Intial Adjacency Matrix
 1 0 1 0 
 0 1 0 0 
 0 0 1 0 
 1 0 0 0 
-Central node is: 3
+Central nodes  are: 0
+

@@ -11,9 +11,14 @@
  * specifically eigenvalue estimations used
  * to determine the central node within a community
  * of connected nodes.
- * 
+ *
+ * It will only work for communities that have a single
+ * central node. If there are nodes with equal centrality, 
+ * the program will return the node with sequential
+ * precedence.
+ *
  * author: Samantha Carswell
- * versionL 03-26-2017
+ * version 04-12-2017
  */
 long	 			nodes_num;
 igraph_matrix_t		adjMatrix;
@@ -103,7 +108,7 @@ double max(igraph_vector_t *vector)
  * Computes central node from an adjacency
  * matrix which represents a single community.
  * Implements eigenvalue calculations and methods
- * from iGraph library to find the node which has
+ * from ziGraph library to find the node which has
  * the most impact on the matrix upon its removal.
  *
  * Returns the central node.
@@ -123,7 +128,6 @@ int findCentrality()
 	int					node = -1;
 	int					info = 0;
 	int					idx = 1;
-
 	igraph_matrix_init(&A, nodes_num, nodes_num);
 	igraph_vector_init(&values, 0);
 	igraph_vector_init(&col_values, nodes_num);
@@ -166,16 +170,19 @@ int findCentrality()
 		printf("%lf - %lf / %lf\n", init_eigenValue, curr_eigenValue, init_eigenValue);
 		printf("Change in eigenvalue is %lf\n", curr_change);
 #		endif
-		if (max_change <= curr_change)
+		
+		if (max_change < curr_change)
 		{
 			max_change = curr_change;
 			max_eigenValue = curr_eigenValue;
 			node = idx;
 		}
+
 	}
 
+
     igraph_vector_destroy(&values);
-	return node;
+	return node + 1;
 }
 
 /**
@@ -197,10 +204,12 @@ int main(int argc, char *argv[]) {
 
 	createMatrix(filename);	
 	
-	printf("Intial Adjacency Matrix\n");
+	//printf("Intial Adjacency Matrix\n");
 	printMatrix(&adjMatrix);
 
- 	printf("Central node is: %d\n", findCentrality());
+ 	printf("Central nodes  are: %d\n", findCentrality());
+
+	printf("\n");
 	igraph_matrix_destroy(&adjMatrix);
 
 	return 0;

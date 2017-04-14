@@ -54,12 +54,13 @@ int main(int argc, char* argv[]) {
         double result = get_l(i);
         
 #       pragma omp critical
-        {
+   {
         if (result > max_info.l_value) {
             max_info.l_value = result;
             max_info.vid = i;
         }
-        }
+}
+//	printf("i %d max_l %f\n", i, result);
     }
     STOP_TIMER(max_count)
     
@@ -75,11 +76,11 @@ int main(int argc, char* argv[]) {
  */
 double get_l(int vid) {
     int i;
-    double l_value;
+    double l_value = 0;
     igraph_vs_t current = igraph_vss_1(vid);
     igraph_vector_t neighbors;
-    int vector_size;
-    double w_sum;
+    int vector_size = 0;
+    double w_sum = 0;
 
     igraph_vector_init(&neighbors, 0);
 
@@ -122,7 +123,7 @@ double get_importance(struct edge *current) {
  * from_vertex_degree - 1 / from_vertex_degree + to_vertex_degree - 2.
  */
 double get_w(struct edge *current) {
-    double w_value;
+    double w_value = 0;
     double importance = get_importance(current);
 
     w_value = importance * 
@@ -137,7 +138,7 @@ double get_w(struct edge *current) {
  * (from_vertex_degree - P_VALUE - 1) * to_vertex_degree - P_VALUE - 1)
  */
 double get_u(struct edge *current) {
-    double u_value;
+    double u_value = 0;
 
     current->from_degree = get_vertex_degree(current->from);
     current->to_degree = get_vertex_degree(current->to);
@@ -160,7 +161,7 @@ double get_lambda(int p_value) {
  */
 double get_vertex_degree(int vid) {
     igraph_vector_t degree;
-    int result;
+    int result = 0;
     igraph_vs_t vs = igraph_vss_1(vid);
     
     igraph_vector_init(&degree, 1);

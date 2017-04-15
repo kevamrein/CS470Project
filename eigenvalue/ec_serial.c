@@ -183,7 +183,7 @@ int findCentrality()
 
 
     igraph_vector_destroy(&values);
-	return node + 1;
+	return node;
 }
 
 /**
@@ -208,7 +208,7 @@ int main(int argc, char *argv[]) {
 	//printf("Intial Adjacency Matrix\n");
 	//printMatrix(&adjMatrix);
 
- 	printf("Central nodes are: %d\n", findCentrality());
+ 	printf("Central node is: %d\n", findCentrality());
 
 	printf("\n");
 	igraph_matrix_destroy(&adjMatrix);

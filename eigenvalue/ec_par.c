@@ -235,7 +235,7 @@ int main(int argc, char *argv[]) {
 	createMatrix(filename);	
 	
 	printf("Intial Adjacency Matrix\n");
-	printMatrix(&adjMatrix);
+//	printMatrix(&adjMatrix);
 	int* nodes = findCentrality();
  	
 	if (nodes[0] == 2)

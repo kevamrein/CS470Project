@@ -10,12 +10,12 @@ make
 
 echo "Method #2 Betweenness Centrality BC"
 echo "--Serial Version--"
-./bc data/edges.txt
+OMP_NUM_THREADS=1 srun bc data/edges.txt
 
 echo "--OMP Version--"
-OMP_NUM_THREADS=2 ./bc data/edges.txt
-OMP_NUM_THREADS=4 ./bc data/edges.txt
-OMP_NUM_THREADS=8 ./bc data/edges.txt
+OMP_NUM_THREADS=2 srun bc data/edges.txt
+OMP_NUM_THREADS=4 srun bc data/edges.txt
+OMP_NUM_THREADS=8 srun bc data/edges.txt
 
 echo ""
 echo "Method #3 Degree and Line Importance"
@@ -26,5 +26,4 @@ echo "--OMP Version--"
 OMP_NUM_THREADS=2 srun dil data/edges.txt
 OMP_NUM_THREADS=4 srun dil data/edges.txt
 OMP_NUM_THREADS=8 srun dil data/edges.txt
-
 

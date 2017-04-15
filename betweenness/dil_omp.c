@@ -52,7 +52,11 @@ int main(int argc, char* argv[]) {
     reduction (maximum: max_info)
     for (i = 0 ; i < vcount ; i++) {
         double result = get_l(i);
-        
+        struct Compare new_compare;
+        new_compare.l_value = result;
+        new_compare.vid = i;
+        max_info = new_compare;
+/*
 #       pragma omp critical
         {
         if (result > max_info.l_value) {
@@ -60,6 +64,7 @@ int main(int argc, char* argv[]) {
             max_info.vid = i;
         }
         }
+*/
     }
     STOP_TIMER(max_count)
     
@@ -88,7 +93,9 @@ double get_l(int vid) {
     
     vector_size = igraph_vector_size(&neighbors);
     
-#   pragma omp parallel for default(none) shared(vector_size, neighbors, vid, current) \
+    //printf("Vector size: %d\n", vector_size);
+
+//#   pragma omp parallel for default(none) shared(vector_size, neighbors, vid, current) \
     private(i) reduction(+ : w_sum)
     for (i = 0 ; i < vector_size ; i++) {
 

@@ -69,7 +69,9 @@ struct Compare find_max_betweenness() {
 #       pragma omp critical 
         {
         //printf("i: %d\tbetweenness: %f\n", i, betweenness);
+        
         if (betweenness > max_vertex.betweenness) {
+        printf("i: %d\tbetweenness: %f\n", i, betweenness);
             max_vertex.betweenness = betweenness;
             max_vertex.vid = i;
         }
@@ -77,7 +79,7 @@ struct Compare find_max_betweenness() {
         igraph_vector_destroy(&result);
 	    igraph_vs_destroy(&vs);
     }
-    printf ("max vertex: %d, max_b: %f\n", max_vertex.vid, max_vertex.betweenness);
     
+    	printf ("max vertex: %d, max_b: %f\n", max_vertex.vid, max_vertex.betweenness);
     return max_vertex;    
 }

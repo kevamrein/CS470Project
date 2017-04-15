@@ -52,6 +52,7 @@ int main(int argc, char* argv[]) {
     reduction (maximum: max_info)
     for (i = 0 ; i < vcount ; i++) {
         double result = get_l(i);
+
         //struct Compare new_compare;
         //new_compare.l_value = result;
         //new_compare.vid = i;
@@ -64,11 +65,10 @@ int main(int argc, char* argv[]) {
         if (result > max_info.l_value) {
             max_info.l_value = result;
             max_info.vid = i;
+	    printf("i %d max_l %f\n", i, result);
         }
-        }
+   }
 
-//    }
-//	printf("i %d max_l %f\n", i, result);
     }
     STOP_TIMER(max_count)
     

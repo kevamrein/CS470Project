@@ -19,4 +19,4 @@ dil-serial.o: graph.h dil_omp.c
 	gcc -c $(CLUSTER_CFLAG) $(CLUSTER_LDFLAG) -ligraph -g dil_omp.c -o dil_serial.o
 
 clean:
-	rm -f *.o bc dil
+	rm -f *.o bc dil dil-serial

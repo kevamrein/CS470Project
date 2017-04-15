@@ -56,6 +56,9 @@ int main(int argc, char* argv[]) {
         new_compare.l_value = result;
         new_compare.vid = i;
         max_info = new_compare;
+
+	printf("i %d max_l %f\n", i, result);
+
 /*
 #       pragma omp critical
    {
@@ -66,7 +69,6 @@ int main(int argc, char* argv[]) {
         }
 */
 //    }
-//	printf("i %d max_l %f\n", i, result);
     }
     STOP_TIMER(max_count)
     

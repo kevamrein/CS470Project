@@ -57,7 +57,7 @@ struct Compare find_max_betweenness() {
    for (i = 0; i < vcount ; i+=1) {
         igraph_vs_t vs;
         igraph_vector_t result;
-        igraph_vector_init(&result, 1);
+        igraph_vector_init(&result, 0);
         igraph_vs_1(&vs, i);
         //igraph_vs_seq(&vs, i, i+1);
         igraph_betweenness(&graph, &result, vs, IGRAPH_UNDIRECTED, 0, 1);

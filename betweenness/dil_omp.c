@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
         }
         }
 */
-    }
+//    }
 //	printf("i %d max_l %f\n", i, result);
     }
     STOP_TIMER(max_count)

@@ -170,9 +170,10 @@ int findCentrality()
 		printf("%lf - %lf / %lf\n", init_eigenValue, curr_eigenValue, init_eigenValue);
 		printf("Change in eigenvalue is %lf\n", curr_change);
 #		endif
-		
+	        //if (idx == 0 || idx == 33) 
 		if (max_change < curr_change)
 		{
+			printf ("i: %d change: %f\n", idx, curr_change);	
 			max_change = curr_change;
 			max_eigenValue = curr_eigenValue;
 			node = idx;
@@ -205,9 +206,9 @@ int main(int argc, char *argv[]) {
 	createMatrix(filename);	
 	
 	//printf("Intial Adjacency Matrix\n");
-	printMatrix(&adjMatrix);
+	//printMatrix(&adjMatrix);
 
- 	printf("Central nodes  are: %d\n", findCentrality());
+ 	printf("Central nodes are: %d\n", findCentrality());
 
 	printf("\n");
 	igraph_matrix_destroy(&adjMatrix);

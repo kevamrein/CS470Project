@@ -68,7 +68,7 @@ struct Compare find_max_betweenness() {
         // max_vertex = new_compare;
 #       pragma omp critical 
         {
-        printf("i: %d\tbetweenness: %f\n", i, betweenness);
+        //printf("i: %d\tbetweenness: %f\n", i, betweenness);
         if (betweenness > max_vertex.betweenness) {
             max_vertex.betweenness = betweenness;
             max_vertex.vid = i;

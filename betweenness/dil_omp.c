@@ -52,11 +52,13 @@ int main(int argc, char* argv[]) {
     reduction (maximum: max_info)
     for (i = 0 ; i < vcount ; i++) {
         double result = get_l(i);
-        struct Compare new_compare;
-        new_compare.l_value = result;
-        new_compare.vid = i;
-        max_info = new_compare;
-/*
+        //struct Compare new_compare;
+        //new_compare.l_value = result;
+        //new_compare.vid = i;
+        //max_info = new_compare;
+        //max_info.l_value = result;
+        //max_info.vid = i;
+
 #       pragma omp critical
    {
         if (result > max_info.l_value) {
@@ -64,7 +66,7 @@ int main(int argc, char* argv[]) {
             max_info.vid = i;
         }
         }
-*/
+
 //    }
 //	printf("i %d max_l %f\n", i, result);
     }

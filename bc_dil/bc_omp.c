@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
         struct Compare current_max = find_max_betweenness();
     STOP_TIMER(find_max);
 
-    printf("Find Max Time: %f\n", GET_TIMER(find_max));
+    printf("Time: %f\n", GET_TIMER(find_max));
 
     return 0;
 }
@@ -72,6 +72,6 @@ struct Compare find_max_betweenness() {
         igraph_vs_destroy(&vs);
     }
 
-    printf ("Vertex: %d\tMax Betweenness: %f\t", max_vertex.vid, max_vertex.betweenness);
+    printf ("Vertex: %d\t", max_vertex.vid);
     return max_vertex;    
 }

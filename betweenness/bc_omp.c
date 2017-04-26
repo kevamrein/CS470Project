@@ -72,6 +72,6 @@ struct Compare find_max_betweenness() {
         igraph_vs_destroy(&vs);
     }
 
-    printf ("max vertex: %d, max_b: %f\n", max_vertex.vid, max_vertex.betweenness);
+    printf ("Vertex: %d\tMax Betweenness: %f\t", max_vertex.vid, max_vertex.betweenness);
     return max_vertex;    
 }

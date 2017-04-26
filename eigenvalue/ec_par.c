@@ -231,18 +231,15 @@ int main(int argc, char *argv[]) {
 
     filename = argv[1];
 
-    START_TIMER(createMatrix)
-        createMatrix(filename);	
-    STOP_TIMER(createMatrix)
+    createMatrix(filename);	
 
-        printf("Intial Adjacency Matrix\n");
     START_TIMER(findCentrality)
         int* nodes = findCentrality();
     STOP_TIMER(findCentrality)
 
         if (nodes[0] == 2)
         {
-            printf("Central node is: %d\n", nodes[1]);
+            printf("Vertex: %d\t", nodes[1]);
         }
         else
         {
@@ -255,9 +252,7 @@ int main(int argc, char *argv[]) {
             printf("\n");
         }
 
-    printf("\n");
-
-    printf("Create Time: %f\tFind Time: %f\n", GET_TIMER(createMatrix), GET_TIMER(findCentrality));
+    printf("Time: %f\n", GET_TIMER(findCentrality));
 
     igraph_matrix_destroy(&adjMatrix);
 

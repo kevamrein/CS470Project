@@ -3,8 +3,17 @@
 #include <string.h>
 #include <igraph.h>
 #ifdef _OPENMP
-#include <omp.h>
+#   include <omp.h>
+#   define START_TIMER(X) double _start_##X = omp_get_wtime();
+#   define STOP_TIMER(X)  double _stop_##X = omp_get_wtime();
+#   define GET_TIMER(X)   (_stop_##X - _start_##X)
+#else
+#   include <time.h>
+#   define START_TIMER(X) clock_t _start_##X = clock();
+#   define STOP_TIMER(X)  clock_t _stop_##X = clock();
+#   define GET_TIMER(X)   ((double)(_stop_##X - _start_##X) / (double)CLOCKS_PER_SEC)
 #endif
+
 /** Uncomment this for debugging **/
 //#define _debug
 
@@ -30,42 +39,41 @@ igraph_matrix_t		adjMatrix;
  */
 void createMatrix(char* filename)
 {
-	char* 			line;	
-	FILE 			*fp;
-	char			nodes_string[255];
-	long 			idx=0;
-	long			curr=0;
-	igraph_real_t	node;
-	
-	fp = fopen(filename, "r");
-	
-	if (fp == NULL)	{
-		printf("Could not read in file");
-		exit(EXIT_FAILURE);
-	}
+    char* 			line;	
+    FILE 			*fp;
+    char			nodes_string[255];
+    long 			idx=0;
+    long			curr=0;
+    igraph_real_t	node;
 
-	nodes_num = atoi(fgets(nodes_string, 255, fp));
-	line = malloc(sizeof(char*) * (nodes_num * 2));	
-	
-	if (igraph_matrix_init(&adjMatrix, nodes_num, nodes_num) == -1)
-	{
-		printf("Error creating adjacency matrix\n");
-		exit(EXIT_FAILURE);
-	}
+    fp = fopen(filename, "r");
 
-	for (; idx<nodes_num; idx++)
-	{
-		for (curr=0; curr<nodes_num; curr++)
-		{
+    if (fp == NULL)	{
+        printf("Could not read in file");
+        exit(EXIT_FAILURE);
+    }
 
-			if (fscanf(fp, "%lf", &node) < 0)
-			{
-				printf("Error reading in file\n");
-				exit(EXIT_FAILURE);
-			}
-			igraph_matrix_set(&adjMatrix, idx, curr, node);
-		}
-	}
+    nodes_num = atoi(fgets(nodes_string, 255, fp));
+    line = malloc(sizeof(char*) * (nodes_num * 2));	
+
+    if (igraph_matrix_init(&adjMatrix, nodes_num, nodes_num) == -1)
+    {
+        printf("Error creating adjacency matrix\n");
+        exit(EXIT_FAILURE);
+    }
+
+    for (; idx<nodes_num; idx++)
+    {
+        for (curr=0; curr<nodes_num; curr++)
+        {
+            if (fscanf(fp, "%lf", &node) < 0)
+            {
+                printf("Error reading in file\n");
+                exit(EXIT_FAILURE);
+            }
+            igraph_matrix_set(&adjMatrix, idx, curr, node);
+        }
+    }
 }
 
 /**
@@ -73,18 +81,18 @@ void createMatrix(char* filename)
  */
 void printMatrix(igraph_matrix_t* matrix)
 {
-	long row, col, size;
-	size = igraph_matrix_ncol(matrix);
+    long row, col, size;
+    size = igraph_matrix_ncol(matrix);
 
-	for (row = 0; row <size; row++)
-	{
-		for (col=0; col<size;col++)
-		{
-			printf("%1.0lf ", igraph_matrix_e(matrix, row, col));
-		}
-		printf("\n");
+    for (row = 0; row <size; row++)
+    {
+        for (col=0; col<size;col++)
+        {
+            printf("%1.0lf ", igraph_matrix_e(matrix, row, col));
+        }
+        printf("\n");
 
-	}
+    }
 }
 
 /**
@@ -93,16 +101,16 @@ void printMatrix(igraph_matrix_t* matrix)
  */
 double max(igraph_vector_t *vector)
 {
-	int idx = 0;
-	double value = 0;
+    int idx = 0;
+    double value = 0;
 
-	for (; idx<igraph_vector_size(vector); idx++)
-	{
-		if (value < igraph_vector_e(vector, idx))
-			value = igraph_vector_e(vector, idx);
-	}
+    for (; idx<igraph_vector_size(vector); idx++)
+    {
+        if (value < igraph_vector_e(vector, idx))
+            value = igraph_vector_e(vector, idx);
+    }
 
-	return value;
+    return value;
 
 }
 
@@ -118,101 +126,92 @@ double max(igraph_vector_t *vector)
 int* findCentrality()
 {
 
-//	igraph_vector_t values, col_values, row_values;
-//	igraph_matrix_t A;
-	double				init_eigenValue = 0.0;
-	double 				curr_eigenValue = 0.0;
-	double				max_eigenValue = 0.0;
-	double				max_change = 0.0;
-	int*				node = (int*)calloc(1, sizeof(int));
-	int					info = 0;
-	int					idx = 1;
-	igraph_vector_t init_values;
-	igraph_vector_init(&init_values, 0);
-	node[0] = 1;
-	/*igraph_matrix_init(&A, nodes_num, nodes_num);
-	igraph_vector_init(&values, 0);
-	igraph_vector_init(&col_values, nodes_num);
-	igraph_vector_init(&row_values, nodes_num);
-	igraph_vector_fill(&col_values, 0);
-	igraph_vector_fill(&row_values, 0);
-*/
-	/*
-	 * Find initial eigenvalue of matrix.
-	 */
-	igraph_lapack_dgeev(&adjMatrix, &init_values, NULL, NULL, NULL, &info);	
-	init_eigenValue = max(&init_values);
-	igraph_vector_destroy(&init_values);
+    //	igraph_vector_t values, col_values, row_values;
+    //	igraph_matrix_t A;
+    double				init_eigenValue = 0.0;
+    double 				curr_eigenValue = 0.0;
+    double				max_eigenValue = 0.0;
+    double				max_change = 0.0;
+    int*				node = (int*)calloc(1, sizeof(int));
+    int					info = 0;
+    int					idx = 1;
+    igraph_vector_t init_values;
+    igraph_vector_init(&init_values, 0);
+    node[0] = 1;
+    /*
+     * Find initial eigenvalue of matrix.
+     */
+    igraph_lapack_dgeev(&adjMatrix, &init_values, NULL, NULL, NULL, &info);	
+    init_eigenValue = max(&init_values);
+    igraph_vector_destroy(&init_values);
 #	ifdef _debug
-	printf("Initial Eigenvalue: %lf\n", init_eigenValue);
+    printf("Initial Eigenvalue: %lf\n", init_eigenValue);
 #	endif
 #	pragma omp parallel default(shared) private(idx)//, values, col_values, row_values, A)
-	{
-		
-		igraph_vector_t values, col_values, row_values;
-		igraph_matrix_t A;
+    {
+
+        igraph_vector_t values, col_values, row_values;
+        igraph_matrix_t A;
 #	pragma omp for
-	for (idx=0; idx < nodes_num; idx++)
-	{
-		double curr_change = 0.0;
+        for (idx=0; idx < nodes_num; idx++)
+        {
+            double curr_change = 0.0;
 
-		igraph_matrix_init(&A, nodes_num, nodes_num);
-		igraph_vector_init(&values, 0);
-		igraph_vector_init(&col_values, nodes_num);
-		igraph_vector_init(&row_values, nodes_num);
-		igraph_vector_fill(&col_values, 0);
-		igraph_vector_fill(&row_values, 0);
-		igraph_vector_fill(&values, 0);
+            igraph_matrix_init(&A, nodes_num, nodes_num);
+            igraph_vector_init(&values, 0);
+            igraph_vector_init(&col_values, nodes_num);
+            igraph_vector_init(&row_values, nodes_num);
+            igraph_vector_fill(&col_values, 0);
+            igraph_vector_fill(&row_values, 0);
+            igraph_vector_fill(&values, 0);
 
-		/* Copy contents of original matrix*/
-		igraph_matrix_copy(&A, &adjMatrix);
-		//i = idx;	
-		/* Set row and col at current idx to all 0's */
-		igraph_matrix_set_row(&A, &row_values, (double) idx);
-		igraph_matrix_set_col(&A, &col_values, (double) idx);
-#		ifdef _debug
-		printf("\nAdjusted Matrix with idx=%d\n", idx);
-		printMatrix(&A);
-#		endif	
-		/* Calculate eigenvalue on adjusted matrix*/
-		igraph_lapack_dgeev(&A, &values, NULL, NULL, NULL, &info);
-		
-		/* Change in eigenvalue / initial eigenvalue */
-		curr_change = (fabs(init_eigenValue - max(&values))) / init_eigenValue;	
-#		ifdef _debug
-		printf("%lf - %lf / %lf\n", init_eigenValue, curr_eigenValue, init_eigenValue);
-		printf("Change in eigenvalue is %lf\n", curr_change);
-#		endif
-		
-		if (max_change < curr_change)
-		{
-#			pragma omp critical
-			{
-				max_change = curr_change;
-				node = (int*) calloc(2, sizeof(int));
-				node[0] = 2;
-				node[1] = idx;
-			}
-		} else if (max_change == curr_change)
-		{
-#			pragma omp critical
-			{
-				node = (int*)realloc(node, sizeof(int) * (node[0] + 1));
-				node[node[0]++]= idx;
-			}
-		}
+            /* Copy contents of original matrix*/
+            igraph_matrix_copy(&A, &adjMatrix);
 
-	}
+            /* Set row and col at current idx to all 0's */
+            igraph_matrix_set_row(&A, &row_values, (double) idx);
+            igraph_matrix_set_col(&A, &col_values, (double) idx);
+#           ifdef _debug
+            printf("\nAdjusted Matrix with idx=%d\n", idx);
+            printMatrix(&A);
+#		    endif	
+            /* Calculate eigenvalue on adjusted matrix*/
+            igraph_lapack_dgeev(&A, &values, NULL, NULL, NULL, &info);
+
+            /* Change in eigenvalue / initial eigenvalue */
+            curr_change = (fabs(init_eigenValue - max(&values))) / init_eigenValue;	
+#           ifdef _debug
+            printf("%lf - %lf / %lf\n", init_eigenValue, curr_eigenValue, init_eigenValue);
+            printf("Change in eigenvalue is %lf\n", curr_change);
+#           endif
+
+            if (max_change < curr_change)
+            {
+#		        pragma omp critical
+                {
+                    max_change = curr_change;
+                    node = (int*) calloc(2, sizeof(int));
+                    node[0] = 2;
+                    node[1] = idx;
+                }
+            } else if (max_change == curr_change)
+            {
+#			    pragma omp critical
+                {
+                    node = (int*)realloc(node, sizeof(int) * (node[0] + 1));
+                    node[node[0]++]= idx;
+                }
+            }
+
+        }
 
 
-	igraph_vector_destroy(&values);
-	igraph_vector_destroy(&row_values);
-	igraph_vector_destroy(&col_values);
-	igraph_matrix_destroy(&A);
-}
-    //igraph_vector_destroy(&values);
-	//return node + 1;
-	return node;
+        igraph_vector_destroy(&values);
+        igraph_vector_destroy(&row_values);
+        igraph_vector_destroy(&col_values);
+        igraph_matrix_destroy(&A);
+    }
+    return node;
 }
 
 /**
@@ -221,40 +220,46 @@ int* findCentrality()
  * matrix.
  */
 int main(int argc, char *argv[]) {
-	char* filename;
-	// read in filename from command line first
-	
-	if (argc != 2)
-	{
-		printf("Please pass a  filename\n");
-		exit(EXIT_FAILURE);
-	}
-		
-	filename = argv[1];
+    char* filename;
+    // read in filename from command line first
 
-	createMatrix(filename);	
-	
-	printf("Intial Adjacency Matrix\n");
-//	printMatrix(&adjMatrix);
-	int* nodes = findCentrality();
- 	
-	if (nodes[0] == 2)
-	{
-		printf("Central node is: %d\n", nodes[1]);
-	}
-	else
-	{
-		int i;
-		printf("Found %d central nodes: ", nodes[0]-1);
-		for (i = 1; i < nodes[0]; i++)
-		{
-			printf("%d ", nodes[i]);
-		}
-		printf("\n");
-	}
+    if (argc != 2)
+    {
+        printf("Please pass a  filename\n");
+        exit(EXIT_FAILURE);
+    }
 
-	printf("\n");
-	igraph_matrix_destroy(&adjMatrix);
+    filename = argv[1];
 
-	return 0;
+    START_TIMER(createMatrix)
+        createMatrix(filename);	
+    STOP_TIMER(createMatrix)
+
+        printf("Intial Adjacency Matrix\n");
+    START_TIMER(findCentrality)
+    int* nodes = findCentrality();
+    STOP_TIMER(findCentrality)
+
+        if (nodes[0] == 2)
+        {
+            printf("Central node is: %d\n", nodes[1]);
+        }
+        else
+        {
+            int i;
+            printf("Found %d central nodes: ", nodes[0]-1);
+            for (i = 1; i < nodes[0]; i++)
+            {
+                printf("%d ", nodes[i]);
+            }
+            printf("\n");
+        }
+
+    printf("\n");
+
+    printf("Create Time: %f\tFind Time: %f\n", GET_TIMER(createMatrix), GET_TIMER(findCentrality));
+
+    igraph_matrix_destroy(&adjMatrix);
+
+    return 0;
 }

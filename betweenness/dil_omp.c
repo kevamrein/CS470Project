@@ -47,11 +47,11 @@ int main(int argc, char* argv[]) {
 
 
     START_TIMER(max_count)
-#   pragma omp parallel for default(none) shared (vcount)  private(i)
+#   pragma omp parallel for default(none) shared (vcount, max_info)  private(i)
         for (i = 0 ; i < vcount ; i++) {
             double result = get_l(i);
 
-#               pragma omp critical
+#           pragma omp critical
             {
                 if (result > max_info.l_value) {
                     max_info.l_value = result;
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
         }
     STOP_TIMER(max_count)
 
-        printf("max_vertex: %d\tmax_l: %f\n", max_info.vid, max_info.l_value);
+    printf("Vertex: %d\tMax L-Value: %f\t", max_info.vid, max_info.l_value);
     printf("Find Max Time: %f\n", GET_TIMER(max_count));
 
     igraph_destroy(&graph);

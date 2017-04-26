@@ -7,7 +7,7 @@
 echo "Using Zachary's Karate Data Set"
 
 make
-TXT="data/collab.txt" 
+TXT="data/dil_test.txt" 
 
 echo "Method #2 Betweenness Centrality BC"
 echo "--Serial Version--"

@@ -62,8 +62,8 @@ int main(int argc, char* argv[]) {
         }
     STOP_TIMER(max_count)
 
-    printf("Vertex: %d\tMax L-Value: %f\t", max_info.vid, max_info.l_value);
-    printf("Find Max Time: %f\n", GET_TIMER(max_count));
+    printf("Vertex: %d\t", max_info.vid);
+    printf("Time: %f\n", GET_TIMER(max_count));
 
     igraph_destroy(&graph);
     return 0;

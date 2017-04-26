@@ -237,7 +237,7 @@ int main(int argc, char *argv[]) {
 
         printf("Intial Adjacency Matrix\n");
     START_TIMER(findCentrality)
-    int* nodes = findCentrality();
+        int* nodes = findCentrality();
     STOP_TIMER(findCentrality)
 
         if (nodes[0] == 2)

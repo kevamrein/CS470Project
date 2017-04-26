@@ -1,5 +1,5 @@
 -- Title --
-Graph Analysis 
+Analysis of Parallel Implementations of Centrality Algorithms 
 
 -- Authors --
 Kevin Amrein, Sam Carswell, and Chuchi Soriano
@@ -7,33 +7,37 @@ Kevin Amrein, Sam Carswell, and Chuchi Soriano
 -- Source Code --
 setup.sh has the code to preload the igraph library and use gcc v.4. 
 
-/betweenness holds the source code for the OMP implementations of BC and DIL. 
-	- bc_omp.c: source code for betweenness centrality with omp pragmas
-	- dil_omp.c: source code for degree & line importance w/ omp pragmas
-	- data directory: contains zachary's karate data set & simple networks 
+/bc_dil holds the source code for the OMP implementations of BC and DIL. 
+	- bc_omp.c: source code for betweenness centrality
+	- dil_omp.c: source code for degree & line importance
+	- data directory: contains datasets used for testing 
+      (formatted as edge lists)
 
-/eigenvalue holds the source code for the serial implementation of EC.
-	- ec_serial.c: source code for serial implementation of EC 
-	- data directory: contains example adjacency matrices for 1 community
-	- out directory: stores output files
+/ec holds the source code for the serial and OMP implementation of EC.
+	- AdjacencyMatrixConverter: Java program that converts a file containing
+      edge lists to a file containing an adjacency matrix to be passed when 
+      running the implementation for EC. 
+    - ec_serial.c: source code for serial implementation of EC 
+    - ec_par.c: source code for parallel implementation of EC 
+	- data directory: contains preconverted adjacency matrices used for testing
+	- out directory: stores output files used, when ran directory's test.sh
 
 Disregard /igraph_example: folder of tutorial code for IGraph library
 
---  Directions --
-1. Run ./setup.sh 
-(We ran into some issues with the script not loading the required files so 
-if errors occurs, make sure to run these commands first): 
-	1. export LD_LIBRARY_PATH=/shared/lib/igraph-0.7.1/build/lib:$LD_LIBRARY_PATH
-	2. source /shared/bin/gcc-4.9.4-setup.sh
+-- Project Directions --
+1. $ . ./setup.sh 
 
-To test BC & DIL: 
-	1. From the parent directory, Run cd betweenness/
-	2. Run ./test.sh to see the results for BC and DIL
-(If test.sh is run with sbatch or srun, there are errors at the top related to the
-custom reduction. We believe there's an issue with correct gcc compiler not being 
-sourced on the compute nodes) 
+2. $ srun ./test.sh
+This script tests EC, BC, and DIL with 4 datasets for accuracy: ability to
+find important nodes. (explanation of output in final report)
+This also tests BC and DIL with 2 datasets for performance. EC was not run
+due to its extremely long execution time (~hours).
 
-To test EC: 
-	1. From the parent directory, Run cd eigenvalue/
-	2. Run ./test.sh to see the results for EC w/ multiple adjacency matrices
-	3. Run cd out/ to see the results for different adjacency matrices
+--
+-- bc_dil/data text file format -- 
+    
+    2       # of Edges * 2
+    0 1     FromVertex ToVertex
+
+-- ec/AdjancenyMatrixConverter Directions -- 
+1. $ java AdjancencyMatrixConverter EDGELISTFILE #OFNODES <data/OUTPUTFILENAME>

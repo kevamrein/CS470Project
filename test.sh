@@ -7,14 +7,17 @@
 
 cd betweenness 
 make
-TXT="data/edges.txt"
+texts=("data/edges.txt" "data/dolphin.txt" "data/lesmis.txt" "data/collegefootball.txt")
 files=("./bc" "./dil")
 echo "test"
-for file in ${files[@]}
+for text in ${texts[@]}
 do
-    echo $file
-    for i in 1 2 4 8
+    for file in ${files[@]}
     do
-        OMP_NUM_THREADS=${i} $file $TXT
+        echo $file
+        for i in 1 2 4 8
+        do
+            OMP_NUM_THREADS=${i} $file $text
+        done
     done
-done 
+done

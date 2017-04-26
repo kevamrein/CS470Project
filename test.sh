@@ -4,10 +4,10 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 
-make clean -C betweenness
-make -C betweenness
-make clean -C eigenvalue
-make -C eigenvalue
+make clean -C bc_dil
+make -C bc_dil
+make clean -C ec
+make -C ec
 
 labels=("Zachary's Karate Club" "Dolphin Network" "Les Miserables Network" "College Football")
 texts=("data/edges.txt" "data/dolphin.txt" "data/lesmis.txt" "data/collegefootball.txt")
@@ -24,7 +24,7 @@ do
     for i in 1 2 4 8 16
     do
         printf "Thread Count: %d\t" "$i"
-        OMP_NUM_THREADS=${i} ./eigenvalue/ec_par eigenvalue/$text
+        OMP_NUM_THREADS=${i} ./ec/ec_par ec/$text
     done
     for file in ${files[@]}
     do
@@ -32,7 +32,7 @@ do
         for i in 1 2 4 8 16
         do
             printf "Thread Count: %d\t" "$i"
-            OMP_NUM_THREADS=${i} ./betweenness/$file betweenness/$text
+            OMP_NUM_THREADS=${i} ./bc_dil/$file bc_dil/$text
         done
     done
     index=$((index+1))
@@ -53,7 +53,7 @@ do
         for i in 1 4 8 16 32
         do
             printf "Thread Count: %d\t" "$i"
-            OMP_NUM_THREADS=${i} ./betweenness/$file betweenness/$text
+            OMP_NUM_THREADS=${i} ./bc_dil/$file bc_dil/$text
         done
     done
     index=$((index+1))

@@ -9,8 +9,8 @@ make -C bc_dil
 make clean -C ec
 make -C ec
 
-labels=("Zachary's Karate Club" "Dolphin Network" "Les Miserables Network" "College Football")
-texts=("data/edges.txt" "data/dolphin.txt" "data/lesmis.txt" "data/collegefootball.txt")
+labels=("Zachary's Karate Club" "Dolphin Network" "Les Miserables Network")
+texts=("data/edges.txt" "data/dolphin.txt" "data/lesmis.txt")
 files=("bc" "dil")
 index=0
 
@@ -41,8 +41,8 @@ done
 
 echo "-----PERFORMANCE TESTING-----"
 echo ""
-labels=("Scientific Collaboration Network" "Facebook Network")
-texts=("data/collab.txt" "data/fb.txt")
+labels=("College Football" "Scientific Collaboration Network" "Facebook Network")
+texts=("data/collegefootball.txt" "data/collab.txt" "data/fb.txt")
 index=0
 for text in ${texts[@]}
 do

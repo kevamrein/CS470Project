@@ -28,7 +28,7 @@ Disregard /igraph_example: folder of tutorial code for IGraph library
 1. $ . ./setup.sh 
 
 2. $ srun ./test.sh
-This script tests EC, BC, and DIL with 4 datasets for accuracy: ability to
+This script tests EC, BC, and DIL with 3 datasets for accuracy: ability to
 find important nodes. (explanation of output in final report)
 This also tests BC and DIL with 2 datasets for performance. EC was not run
 due to its extremely long execution time (~hours).
@@ -39,5 +39,5 @@ due to its extremely long execution time (~hours).
     2       # of Edges * 2
     0 1     FromVertex ToVertex
 
--- ec/AdjancenyMatrixConverter Directions -- 
+-- ec/utilities/AdjancenyMatrixConverter Directions -- 
 1. $ java AdjancencyMatrixConverter EDGELISTFILE #OFNODES <data/OUTPUTFILENAME>
